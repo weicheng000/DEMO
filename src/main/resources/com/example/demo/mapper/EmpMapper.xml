@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.example.demo.mapper.EmpMapper">
+
+    <select id="getDataTotal" resultType="java.lang.Integer">
+        select count(*)
+        from emp
+        <where>
+            <if test="id != null">
+                and id like '%' + concat(#{id}, '%')
+            </if>
+            <if test="name != null">
+                and name like '%' + concat(#{name}, '%')
+            </if>
+            <if test="role != null">
+                and role like '%' + concat (#{role}, '%')
+            </if>
+            <if test="sex != null">
+                and sex like '%' + concat(#{sex}, '%')
+            </if>
+            <if test="createTime != null">
+                and create_time like '%' + concat(#{createTime}, '%')
+            </if>
+            <if test="updateTime != null">
+                and update_time like '%' + concat(#{updateTime}, '%')
+            </if>
+            <if test="deptId != null">
+                and dept_id like '%' + concat(#{deptId}, '%')
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getDataByPage" resultType="com.example.demo.pojo.Emp">
+        select id, name, role, sex, create_time, update_time, dept_id
+        from emp
+        order by id
+        offset #{offset} rows
+        fetch next #{limit} rows only
+    </select>
+
+    <select id="queryDataByParam" resultType="com.example.demo.pojo.Emp">
+        select id, name, role, sex, create_time, update_time, dept_id
+        from emp
+        <where>
+            <if test="emp.id != null">
+                and id like '%' + concat(#{emp.id}, '%')
+            </if>
+            <if test="emp.name != null">
+                and name like '%' + concat(#{emp.name}, '%')
+            </if>
+            <if test="emp.role != null">
+                and role like '%' + concat(#{emp.role}, '%')
+            </if>
+            <if test="emp.sex != null">
+                and sex like '%' + concat(#{emp.sex}, '%')
+            </if>
+            <if test="emp.createTime != null">
+                and create_time like '%' + concat(#{emp.createTime}, '%')
+            </if>
+            <if test="emp.updateTime != null">
+                and update_time like '%' + concat(#{emp.updateTime}, '%')
+            </if>
+            <if test="emp.deptId != null">
+                and dept_id like '%' + concat(#{emp.deptId}, '%')
+            </if>
+        </where>
+        order by id
+        offset #{offset} rows
+        fetch next #{limit} rows only
+    </select>
+
+    <insert id="insertByParam">
+        INSERT INTO emp (name, role, sex, dept_id)
+        VALUES (#{name}, #{role}, #{sex}, 1)
+    </insert>
+
+    <update id="updateByParam">
+        UPDATE emp
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="role != null">
+                role = #{role},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="deptId != null">
+                dept_id = #{deptId},
+            </if>
+            <if test="name != null or role != null or sex != null or deptId != null">
+                update_time = GETDATE()
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from emp
+        where id = #{id}
+    </delete>
+
+</mapper>
