@@ -1,5 +1,6 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '@/store'
 
 const routes = [
   {
@@ -23,7 +24,7 @@ const routes = [
       {
         path: '',
         name: 'Table',
-        component: () => import( '@/views/Home.vue'),
+        component: () => import( '@/views/Home.vue')
       },
     ],
     meta: {
@@ -38,8 +39,8 @@ const router = createRouter({
 })
 // 路由攔截器
 router.beforeEach(async (to, from, next) => {
-  if (to.matched.some(record => record.meta.auth) && to.matched.auth){
-    let token = localStorage.getItem('token');
+  if (to.matched.some(record => record.meta.auth)){
+    let token = store.getters.getToken;
     if (token){
       next();
     } else {
@@ -50,8 +51,7 @@ router.beforeEach(async (to, from, next) => {
         }
       })
     }
-  }
-  next();
+  } else next();
 })
 
 export default router

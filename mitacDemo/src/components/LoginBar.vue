@@ -57,6 +57,7 @@
 <script setup>
 import {ref} from "vue";
 import router from "@/router";
+import store from "@/store"
 
 const email = ref(null);
 const password = ref(null);
@@ -69,6 +70,8 @@ const required = (v) => {
 };
 
 const submitLogin = async () => {
+  loading.value = true;
+
   let loginData;
 
   if (email.value && password.value){
@@ -78,6 +81,7 @@ const submitLogin = async () => {
     }
   }else {
     console.log("bad");
+    loading.value = false;
     return;
   }
 
@@ -91,12 +95,14 @@ const submitLogin = async () => {
 
   if (result.code === 1){
     const token = result.data;
-    localStorage.setItem("token", token);
+    store.commit('setToken',token)
 
     await router.push("/table");
   }else {
     console.log("false");
   }
+
+  loading.value = false;
 }
 
 </script>

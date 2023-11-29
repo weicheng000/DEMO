@@ -1,11 +1,14 @@
 import axios from "axios";
+import store from "@/store"
 
 axios.defaults.withCredentials = true;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.put['Content-Type'] = 'application/json';
 axios.interceptors.request.use(
   config => {
-    let token = localStorage.getItem('token');
+
+    // let token = localStorage.getItem('token');
+    let token = store.getters.getToken;
     if (token){
       config.headers.Authorization = token;
     }
