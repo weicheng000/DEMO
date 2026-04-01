@@ -1,0 +1,34 @@
+name: Build Frontend and Integrate
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Node 環境
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # build 前端
+      - name: Install & Build Frontend
+        working-directory: ./mitacDemo
+        run: |
+          npm install
+          npm run build
+
+      # 清空舊 static（避免殘留）
+      - name: Clean static folder
+        run: rm -rf src/main/resources/static/*
+
+      # 複製 dist → static
+      - name: Copy dist to static
+        run: cp -r mitacDemo/dist/* src/main/resources/static/
